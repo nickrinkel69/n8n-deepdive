@@ -1,0 +1,134 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=- je deadline is om: {{ $json.modifiedContent }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        700,
+        -160
+      ],
+      "id": "0ad7d9b8-690a-419e-b1b9-73bbde63051a",
+      "name": "stuurt-message-naar-discord",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "PD5OXOb0CF35KYCU",
+          "name": "MR.Reminder"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "channelIds": [
+          "1333746720231653407"
+        ],
+        "value": "deadline"
+      },
+      "type": "n8n-nodes-discord-trigger.discordTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -160
+      ],
+      "id": "e20afde0-cb25-433e-9928-11a08879b83a",
+      "name": "Discord Trigger",
+      "credentials": {
+        "discordBotTriggerApi": {
+          "id": "pFBpiKQPEgHVtant",
+          "name": "Discord Bot Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let value = $('Discord Trigger').first().json.content;\n\nif (typeof value === \"string\") {\n    value = value.substring(8);\n}\n\nreturn [{ json: { modifiedContent: value } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        -160
+      ],
+      "id": "0e5322ef-7332-478f-8100-d43846972001",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "de deadline is opgeslagen!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        200,
+        -160
+      ],
+      "id": "4c0d1753-d9a0-4309-9a21-f923168417aa",
+      "name": "Discord",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "PD5OXOb0CF35KYCU",
+          "name": "MR.Reminder"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "stuurt-message-naar-discord": {
+      "main": [
+        []
+      ]
+    },
+    "Discord Trigger": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "stuurt-message-naar-discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "459801f5-0aac-4f54-b295-dcaac1752c19",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "faebb45c3faa11a83d47976e84e474c238857366f49888f292fa60f8cdf6c9bb"
+  },
+  "id": "miT2IdqBefnr01n6",
+  "tags": []
+}
